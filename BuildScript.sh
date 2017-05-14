@@ -1,4 +1,4 @@
-mainMenu
+#!/bin/bash
 
 mainMenu (){
 
@@ -57,3 +57,5 @@ compile (){
     make carbon -j8
 
 }
+
+mainMenu
