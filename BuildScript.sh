@@ -1,23 +1,59 @@
-read -r -p "Repo sync (y/n): " repoSync
+mainMenu
 
-if [ "$repoSync" = "y" ]; then
+mainMenu (){
 
-	repo sync --force-sync
+	while :
+	do
+		echo "1. Repo sync"
+		echo "2. Compile"
+		echo "3. Exit"
 
-else
+	    read -r -p "Choose an option: " option
 
-	echo "Repo syncing disabled"
+	    case "$option" in
+		    "1") repoSync
+            ;;
+            "2") compile
+            ;;
+            "3") exit
 
-fi
+        esac
 
-source build/envsetup.sh
+        clear
 
-read -r -p "CARBON_BUILDTYPE=" crtype
+    done
 
-export CARBON_BUILDTYPE=$crtype
 
-read -r -p "BUILD_VARIANT=" variant
+}
 
-lunch carbon_bacon-$variant
+repoSync (){
 
-make carbon -j8
+	read -r -p "Repo sync (y/n): " repoSync
+
+    if [ "$repoSync" = "y" ]; then
+
+	    repo sync --force-sync
+
+    else
+
+	    echo "Repo syncing aborted"
+
+    fi
+
+}
+
+compile (){
+
+    source build/envsetup.sh
+
+    read -r -p "CARBON_BUILDTYPE=" crtype
+
+    export CARBON_BUILDTYPE=$crtype
+
+    read -r -p "BUILD_VARIANT=" variant
+
+    lunch carbon_bacon-$variant
+
+    make carbon -j8
+
+}
