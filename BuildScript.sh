@@ -55,14 +55,17 @@ function compile() {
 
     read -r -p "CARBON_BUILDTYPE=" crtype;
 
-    export CARBON_BUILDTYPE=$crtype;
+    export CARBON_BUILDTYPE="$crtype";
 
     read -r -p "BUILD_VARIANT=" variant;
+
+    read -r -p "How many threads do you want to build?: " threads;
 
     read -r -p "Clean build? (y/n): " clean;
 
     echo -e "${Yellow}Build type: $crtype";
     echo    "Build variant: $variant";
+    echo    "Threads: $threads";
     echo    "Clean build: $clean";
     echo -e "Building for $device${NC}";
 
@@ -76,7 +79,7 @@ function compile() {
 
     fi;
 
-    make carbon -j8;
+    make carbon -j"$threads";
 
 }
 
@@ -100,11 +103,13 @@ function profile1() {
 
 	source build/envsetup.sh;
 
-	export CARBON_BUILDTYPE=$BUILDTYPE;
+	export CARBON_BUILDTYPE="$BUILDTYPE";
     
     echo -e "${Yellow}$NAME";
 	echo    "Build type: $BUILDTYPE";
     echo    "Build variant: $VARIANT";
+    echo    "Threads: $THREADS";
+    echo    "Clean build: $CLEAN";
     echo -e "Building for $DEVICE${NC}";
 
     sleep 5;
@@ -117,7 +122,7 @@ function profile1() {
 
     fi;
 
-	make carbon -j8;
+	make carbon -j"$THREADS";
 }
 
 function profilesIntegrity() {
