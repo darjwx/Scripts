@@ -6,9 +6,8 @@ mainMenu (){
 	do
 		echo -e "${BBlue}1. ${BBlue}Repo sync"
 		echo -e "${BBlue}2. ${BBlue}Compile"
-		echo -e "${BBlue}3. ${BBlue}Userdebug personal build"
-		echo -e "${BBlue}4. ${BBlue}Eng experimental build"
-		echo -e "${BBlue}5. ${BRed}Exit${NC}"
+		echo -e "${BBlue}3. ${BBlue}Profiles"
+		echo -e "${BBlue}4. ${BRed}Exit${NC}"
 
 	    read -r -p "Choose an option: " option
 
@@ -17,11 +16,9 @@ mainMenu (){
             ;;
             "2") compile
             ;;
-            "3") profile1
+            "3") profilesControl
             ;;
-            "4") profile2
-            ;;
-            "5") exit
+            "4") exit
 
         esac
 
@@ -81,42 +78,60 @@ compile (){
 
 }
 
+profilesControl (){
+
+	profilesIntegrity
+
+	echo -e "${BBlue}1. $NAME"
+
+	read -r -p "Choose a profile: " option
+
+	if [ "$option" = "1" ]; then
+
+		profile1
+
+	fi
+
+}
+
 profile1 (){
 
 	source build/envsetup.sh
 
-	export CARBON_BUILDTYPE=Personal
-
-	echo -e "${Yellow}Build type: Personal"
-    echo -e "Build variant: Userdebug"
+	export CARBON_BUILDTYPE=$BUILDTYPE
+    
+    echo -e "${Yellow}$NAME"
+	echo -e "Build type: $BUILDTYPE"
+    echo -e "Build variant: $VARIANT"
     echo -e "Building for bacon${NC}"
 
     sleep 5
 
-    lunch carbon_bacon-userdebug
+    lunch carbon_bacon-$VARIANT
+
+    if [ "$CLEAN" = "y" ]; then
+
+    	make clean
+
+    fi
 
 	make carbon -j8
-
 }
 
-profile2 (){
+profilesIntegrity (){
 
-	source build/envsetup.sh
+    if egrep -q -v '^#|^[^ ]*=[^;]*' "$profiles"; then
 
-	export CARBON_BUILDTYPE=Experimental
+      echo "Profiles file contain code that was not intended to be there. Cleaning"
 
-	echo -e "${Yellow}Build type: Experimental"
-    echo -e "Build variant: Eng"
-    echo -e "Clean build"
-    echo -e "Building for bacon${NC}"
+      # Copy the filtered profiles to a new file
+      egrep '^#|^[^ ]*=[^;&]*'  "$profiles" > "$profilesSecured"
+      
+      profiles="$profilesSecured"
 
-    sleep 5
+    fi
 
-	lunch carbon_bacon-eng
-
-	make clean
-
-	make carbon -j8
+    source "$profiles"
 
 }
 
@@ -127,5 +142,9 @@ BBlue='\033[1;34m'
 
 # No Color
 NC='\033[0m' 
+
+# Profiles config file
+profiles='profiles.cfg'
+profilesSecured='profilesSecured.cfg'
 
 mainMenu
