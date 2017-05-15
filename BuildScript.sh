@@ -4,10 +4,10 @@ mainMenu (){
 
 	while :
 	do
-		echo -e "${BBlue}1. ${BBlue}Repo sync"
-		echo -e "${BBlue}2. ${BBlue}Compile"
-		echo -e "${BBlue}3. ${BBlue}Profiles"
-		echo -e "${BBlue}4. ${BRed}Exit${NC}"
+		echo -e "${BBlue}1. Repo sync"
+		echo -e "2. Compile"
+		echo -e "3. Profiles"
+		echo -e "4. ${BRed}Exit${NC}"
 
 	    read -r -p "Choose an option: " option
 
@@ -26,7 +26,6 @@ mainMenu (){
 
     done
 
-
 }
 
 repoSync (){
@@ -39,7 +38,7 @@ repoSync (){
 
     else
 
-	    echo -e "${Yellow}Repo syncing aborted"
+	    echo -e "${Yellow}Repo syncing aborted${NC}"
 
 	    sleep 1
 
@@ -82,7 +81,7 @@ profilesControl (){
 
 	profilesIntegrity
 
-	echo -e "${BBlue}1. $NAME"
+	echo -e "${BBlue}1. $NAME${NC}"
 
 	read -r -p "Choose a profile: " option
 
@@ -122,7 +121,7 @@ profilesIntegrity (){
 
     if egrep -q -v '^#|^[^ ]*=[^;]*' "$profiles"; then
 
-      echo "Profiles file contain code that was not intended to be there. Cleaning"
+      echo -e "Profiles file contain code that was not intended to be there. Cleaning"
 
       # Copy the filtered profiles to a new file
       egrep '^#|^[^ ]*=[^;&]*'  "$profiles" > "$profilesSecured"
