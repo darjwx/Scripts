@@ -60,13 +60,22 @@ compile (){
 
     read -r -p "BUILD_VARIANT=" variant
 
+    read -r -p "Clean build? (y/n): " clean
+
     echo -e "${Yellow}Build type: $crtype"
     echo -e "Build variant: $variant"
+    echo -e "Clean build: $clean"
     echo -e "Building for bacon${NC}"
 
     sleep 5
 
     lunch carbon_bacon-$variant
+
+    if [ "$clean" = "y" ]; then
+
+    	make clean
+
+    fi
 
     make carbon -j8
 
@@ -98,11 +107,14 @@ profile2 (){
 
 	echo -e "${Yellow}Build type: Experimental"
     echo -e "Build variant: Eng"
+    echo -e "Clean build"
     echo -e "Building for bacon${NC}"
 
     sleep 5
 
 	lunch carbon_bacon-eng
+
+	make clean
 
 	make carbon -j8
 
