@@ -50,6 +50,8 @@ compile (){
 
     source build/envsetup.sh
 
+    read -r -p "Device to build for?: " device
+
     read -r -p "CARBON_BUILDTYPE=" crtype
 
     export CARBON_BUILDTYPE=$crtype
@@ -61,11 +63,11 @@ compile (){
     echo -e "${Yellow}Build type: $crtype"
     echo -e "Build variant: $variant"
     echo -e "Clean build: $clean"
-    echo -e "Building for bacon${NC}"
+    echo -e "Building for $device${NC}"
 
     sleep 5
 
-    lunch carbon_bacon-$variant
+    lunch carbon_$device-$variant
 
     if [ "$clean" = "y" ]; then
 
@@ -102,11 +104,11 @@ profile1 (){
     echo -e "${Yellow}$NAME"
 	echo -e "Build type: $BUILDTYPE"
     echo -e "Build variant: $VARIANT"
-    echo -e "Building for bacon${NC}"
+    echo -e "Building for $DEVICE${NC}"
 
     sleep 5
 
-    lunch carbon_bacon-$VARIANT
+    lunch carbon_$DEVICE-$VARIANT
 
     if [ "$CLEAN" = "y" ]; then
 
