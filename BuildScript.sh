@@ -22,9 +22,7 @@ function mainMenu() {
             ;;
 
         esac;
-
         clear;
-
     done;
 
 }
@@ -52,15 +50,12 @@ function compile() {
     source build/envsetup.sh;
 
     read -r -p "Device to build for?: " device;
-
     read -r -p "CARBON_BUILDTYPE=" crtype;
 
     export CARBON_BUILDTYPE="$crtype";
 
     read -r -p "BUILD_VARIANT=" variant;
-
     read -r -p "How many threads do you want to build?: " threads;
-
     read -r -p "Clean build? (y/n): " clean;
 
     echo -e "${Yellow}Build type: $crtype";
@@ -85,57 +80,54 @@ function compile() {
 
 function profilesControl() {
 
-	profilesIntegrity;
+    profilesIntegrity;
 
-	echo -e "${BBlue}1. $NAME${NC}";
+    for (( i=0; i<"$PROFILES"; ++i ))
+    do
 
-	read -r -p "Choose a profile: " option;
+        echo -e "${BBlue}$i. ${NAME[$i]}${NC}";
 
-	if [ "$option" == '1' ]; then
+    done;
 
-		profile1;
+    read -r -p "Choose a profile: " option;
 
-	fi;
+    for (( i=0; i<"$PROFILES"; ++i ))
+    do
 
-}
+        if [ "$option" == "$i" ]; then
 
-function profile1() {
-
-	source build/envsetup.sh;
-
-	export CARBON_BUILDTYPE="$BUILDTYPE";
+            source build/envsetup.sh;
+            export CARBON_BUILDTYPE="${BUILDTYPE[$i]}";
     
-    echo -e "${Yellow}$NAME";
-	echo    "Build type: $BUILDTYPE";
-    echo    "Build variant: $VARIANT";
-    echo    "Threads: $THREADS";
-    echo    "Clean build: $CLEAN";
-    echo -e "Building for $DEVICE${NC}";
+            echo -e "${Yellow}${NAME[$i]}";
+            echo    "Build type: ${BUILDTYPE[$i]}";
+            echo    "Build variant: ${VARIANT[$i]}";
+            echo    "Threads: ${THREADS[$i]}";
+            echo    "Clean build: ${CLEAN[$i]}";
+            echo -e "Building for ${DEVICE[$i]}${NC}";
 
-    sleep 5;
+            sleep 5;
 
-    lunch carbon_"$DEVICE"-"$VARIANT";
+            lunch carbon_"${DEVICE[$i]}"-"${VARIANT[$i]}";
 
-    if [ "$CLEAN" = 'y' ]; then
+            if [ "${CLEAN[$i]}" = 'y' ]; then
+                make clean;
+            fi;
 
-    	make clean;
+            make carbon -j"${THREADS[$i]}";
 
-    fi;
+        fi;
+    done;
 
-	make carbon -j"$THREADS";
 }
 
 function profilesIntegrity() {
 
-    if grep -E -q -v '^#|^[^ ]*=[^;]*' "$profiles"; then
-
+    if grep -E -q -v '^#|^[^ *=[^;]*' "$profiles"; then
       echo "Profiles file contain code that was not intended to be there. Cleaning";
-
       # Copy the filtered profiles to a new file
-      grep -E '^#|^[^ ]*=[^;&]*'  "$profiles" > "$profilesSecured";
-      
+      grep -E '^#|^[^ ]*=[^;&]*'  "$profiles" > "$profilesSecured";      
       profiles="$profilesSecured";
-
     fi;
 
     source "$profiles";
