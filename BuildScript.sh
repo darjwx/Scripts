@@ -22,7 +22,8 @@ function mainMenu() {
 		echo -e "${BBlue}1. Repo sync";
 		echo    "2. Compile";
 		echo    "3. Profiles";
-		echo -e "4. ${BRed}Exit${NC}";
+        echo    "4. Repopick";
+		echo -e "5. ${BRed}Exit${NC}";
 
 	    read -r -p "Choose an option: " option;
 
@@ -33,7 +34,9 @@ function mainMenu() {
             ;;
             3) profilesControl;
             ;;
-            4) exit;
+            4) repopickControl;
+            ;;
+            5) exit;
             ;;
 
         esac;
@@ -147,6 +150,21 @@ function profilesIntegrity() {
 
     source "$profiles";
 
+}
+
+function repopickControl() {
+
+    source build/envsetup.sh
+    read -r -p "What do you want to pick? (topic/commit)" pick;
+
+    if [ "${pick}" = "topic" ]; then
+        read -r -p "Topic name: " topic;
+        repopick -t "${topic}";
+    fi;
+    if [ "${pick}" = "commit" ]; then
+        read -r -p "Commit number: " commit;
+        repopick "${commit}";
+    fi;
 }
 
 # Colors
