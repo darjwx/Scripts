@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+# Main menu. Handles all the options.
 function mainMenu() {
 
 	while :
@@ -25,7 +26,7 @@ function mainMenu() {
 		echo    "2. Compile";
 		echo    "3. Profiles";
         echo    "4. Repopick";
-		echo -e "5. ${BRed}Exit${NC}";
+        echo -e "5. ${BRed}Exit${NC}";
 
 	    read -r -p "Choose an option: " option;
 
@@ -47,6 +48,8 @@ function mainMenu() {
 
 }
 
+# Handles how notes work. 
+# Prints them on the console getting the values from settings.cfg.
 function notesControl() {
 
     settingsIntegrity;
@@ -72,6 +75,9 @@ function notesControl() {
     done;
 }
 
+# Sync the source. 
+# Check added to be sure you really want to sync. 
+# You can loose unmerged/unpushed work otherwise.
 function repoSync() {
 
 	read -r -p "Repo sync (y/n): " repoSync;
@@ -90,6 +96,9 @@ function repoSync() {
 
 }
 
+# Handles the compile option.
+# You can manually choose all the avavilable variables:
+# device, build type, build variant, threads and clean build.
 function compile() {
 
     source build/envsetup.sh;
@@ -123,6 +132,9 @@ function compile() {
 
 }
 
+# Handles the profile option.
+# Read the values from settings.cfg, and lists the available profiles.
+# Executes the desired profile.
 function profilesControl() {
 
     settingsIntegrity;
@@ -166,6 +178,8 @@ function profilesControl() {
 
 }
 
+# Checks that the settings.cfg file does not contain any weird code.
+# In case it does, remove that code and copy it cleaned to another file.
 function settingsIntegrity() {
 
     if grep -E -q -v '^#|^[^ *=[^;]*' "$settings"; then
@@ -179,6 +193,8 @@ function settingsIntegrity() {
 
 }
 
+# Handles the repopick option.
+# Let's you choose between topics anc single commits.
 function repopickControl() {
 
     source build/envsetup.sh
