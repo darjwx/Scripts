@@ -19,6 +19,8 @@ function mainMenu() {
 
 	while :
 	do
+        notesControl;
+
 		echo -e "${BBlue}1. Repo sync";
 		echo    "2. Compile";
 		echo    "3. Profiles";
@@ -43,6 +45,31 @@ function mainMenu() {
         clear;
     done;
 
+}
+
+function notesControl() {
+
+    settingsIntegrity;
+
+    for (( i=0; i<"$NOTES"; ++i ))
+    do
+
+        case "${LEVEL[$i]}" in
+            1) echo -e "${BGreen}*** \n${TEXT[$i]}";
+               echo    "${LINK[$i]}";
+               echo -e "${DATE[$i]}\n---";
+            ;;
+            2) echo -e "${BYellow}*** \n${TEXT[$i]}";
+               echo    "${LINK[$i]}";
+               echo -e "${DATE[$i]}\n---";
+            ;;
+            3) echo -e "${BRed}*** \n${TEXT[$i]}";
+               echo    "${LINK[$i]}";
+               echo -e "${DATE[$i]}\n--- ${NC}";
+            ;;
+        esac;
+
+    done;
 }
 
 function repoSync() {
@@ -169,8 +196,10 @@ function repopickControl() {
 
 # Colors
 Yellow='\033[0;33m';
+BYellow='\033[1;33m'
 BRed='\033[1;31m';               
 BBlue='\033[1;34m';
+BGreen='\033[1;32m'
 
 # No Color
 NC='\033[0m';
