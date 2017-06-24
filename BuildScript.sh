@@ -98,7 +98,7 @@ function compile() {
 
 function profilesControl() {
 
-    profilesIntegrity;
+    settingsIntegrity;
 
     for (( i=0; i<"$PROFILES"; ++i ))
     do
@@ -139,16 +139,16 @@ function profilesControl() {
 
 }
 
-function profilesIntegrity() {
+function settingsIntegrity() {
 
-    if grep -E -q -v '^#|^[^ *=[^;]*' "$profiles"; then
-      echo "Profiles file contain code that was not intended to be there. Cleaning";
-      # Copy the filtered profiles to a new file
-      grep -E '^#|^[^ ]*=[^;&]*'  "$profiles" > "$profilesSecured";      
-      profiles="$profilesSecured";
+    if grep -E -q -v '^#|^[^ *=[^;]*' "$settings"; then
+      echo "Settings file contain code that was not intended to be there. Cleaning";
+      # Copy the filtered settings to a new file
+      grep -E '^#|^[^ ]*=[^;&]*'  "$settings" > "$settingsSecured";      
+      settings="$settingsSecured";
     fi;
 
-    source "$profiles";
+    source "$settings";
 
 }
 
@@ -175,8 +175,8 @@ BBlue='\033[1;34m';
 # No Color
 NC='\033[0m';
 
-# Profiles config file
-profiles='profiles.cfg';
-profilesSecured='profilesSecured.cfg';
+# Settings config file
+settings='settings.cfg';
+settingsSecured='settingsSecured.cfg';
 
 mainMenu;
