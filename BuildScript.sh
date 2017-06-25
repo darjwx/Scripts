@@ -15,20 +15,47 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+function asciiTitle(){
+
+    echo -e "${BPurple}HHHHHHHHH     HHHHHHHHH     ${BCyan}QQQQQQQQQ      ";
+    echo -e "${BPurple}H${BWhite}:::::::${BPurple}H     H${BWhite}:::::::${BPurple}H   ${BCyan}QQ${BWhite}:::::::::${BCyan}QQ    ";
+    echo -e "${BPurple}H${BWhite}:::::::${BPurple}H     H${BWhite}:::::::${BPurple}H ${BCyan}QQ${BWhite}:::::::::::::${BCyan}QQ  ";
+    echo -e "${BPurple}HH${BWhite}::::::${BPurple}H     H${BWhite}::::::${BPurple}HH${BCyan}Q${BWhite}:::::::${BCyan}QQQ${BWhite}:::::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}:::::${BPurple}H     H${BWhite}:::::${BPurple}H  ${BCyan}Q${BWhite}::::::${BCyan}O   Q${BWhite}::::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}:::::${BPurple}H     H${BWhite}:::::${BPurple}H  ${BCyan}Q${BWhite}:::::${BCyan}O     Q${BWhite}:::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}::::::${BPurple}HHHHH${BWhite}::::::${BPurple}H  ${BCyan}Q${BWhite}:::::${BCyan}O     Q${BWhite}:::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}:::::::::::::::::${BPurple}H  ${BCyan}Q${BWhite}:::::${BCyan}O     Q${BWhite}:::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}:::::::::::::::::${BPurple}H  ${BCyan}Q${BWhite}:::::${BCyan}O     Q${BWhite}:::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}::::::${BPurple}HHHHH${BWhite}::::::${BPurple}H  ${BCyan}Q${BWhite}:::::${BCyan}O     Q${BWhite}:::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}:::::${BPurple}H     H${BWhite}:::::${BPurple}H  ${BCyan}Q${BWhite}:::::${BCyan}O  QQQQ${BWhite}:::::${BCyan}Q ";
+    echo -e "  ${BPurple}H${BWhite}:::::${BPurple}H     H${BWhite}:::::${BPurple}H  ${BCyan}Q${BWhite}::::::${BCyan}O Q${BWhite}::::::::${BCyan}Q ";
+    echo -e "${BPurple}HH${BWhite}::::::${BPurple}H     H${BWhite}::::::${BPurple}HH${BCyan}Q${BWhite}:::::::${BCyan}QQ${BWhite}::::::::${BCyan}Q ";
+    echo -e "${BPurple}H${BWhite}:::::::${BPurple}H     H${BWhite}:::::::${BPurple}H ${BCyan}QQ${BWhite}::::::::::::::${BCyan}Q  ";
+    echo -e "${BPurple}H${BWhite}:::::::${BPurple}H     H${BWhite}:::::::${BPurple}H   ${BCyan}QQ${BWhite}:::::::::::${BCyan}Q   ";
+    echo -e "${BPurple}HHHHHHHHH     HHHHHHHHH     ${BCyan}QQQQQQQQ${BWhite}::::${BCyan}QQ ";
+    echo -e "                                    ${BCyan}Q${BWhite}:::::${BCyan}Q";
+    echo -e "                                     ${BCyan}QQQQQQ${NC}";
+
+}
+
+
 # Main menu. Handles all the options.
 function mainMenu() {
 
-	while :
-	do
+    clear;
+
+    while :
+    do
+        asciiTitle;
         notesControl;
 
-		echo -e "${BBlue}1. Repo sync";
-		echo    "2. Compile";
-		echo    "3. Profiles";
-        echo    "4. Repopick";
-        echo -e "5. ${BRed}Exit${NC}";
+        echo -e "${BPurple}\n\n1. ${BCyan}Repo sync";
+        echo -e "${BPurple}2. ${BCyan}Compile";
+        echo -e "${BPurple}3. ${BCyan}Profiles";
+        echo -e "${BPurple}4. ${BCyan}Repopick";
+        echo -e "${BWhite}<. Exit${NC}";
 
-	    read -r -p "Choose an option: " option;
+        read -r -p "Choose an option: " option;
 
         case ${option} in
             1) repoSync;
@@ -39,11 +66,11 @@ function mainMenu() {
             ;;
             4) repopickControl;
             ;;
-            5) exit;
+            '<') exit;
             ;;
 
         esac;
-        clear;
+    clear;
     done;
 
 }
@@ -53,6 +80,8 @@ function mainMenu() {
 function notesControl() {
 
     settingsIntegrity;
+
+    echo -e "${UWhite}NOTES${NC}";
 
     for (( i=0; i<"$NOTES"; ++i ))
     do
@@ -80,17 +109,17 @@ function notesControl() {
 # You can loose unmerged/unpushed work otherwise.
 function repoSync() {
 
-	read -r -p "Repo sync (y/n): " repoSync;
+    read -r -p "Repo sync (y/n): " repoSync;
 
     if [ "$repoSync" == 'y' ]; then
 
-	    repo sync --force-sync;
+        repo sync --force-sync;
 
     else
 
-	    echo -e "${Yellow}Repo syncing aborted${NC}";
+        echo -e "${BPurple}Repo syncing aborted${NC}";
 
-	    sleep 1;
+        sleep 1;
 
     fi;
 
@@ -100,6 +129,8 @@ function repoSync() {
 # You can manually choose all the avavilable variables:
 # device, build type, build variant, threads and clean build.
 function compile() {
+
+    clear;
 
     source build/envsetup.sh;
 
@@ -112,7 +143,7 @@ function compile() {
     read -r -p "How many threads do you want to build?: " threads;
     read -r -p "Clean build? (y/n): " clean;
 
-    echo -e "${Yellow}Build type: $crtype";
+    echo -e "${BPurple}Build type: $crtype";
     echo    "Build variant: $variant";
     echo    "Threads: $threads";
     echo    "Clean build: $clean";
@@ -124,7 +155,7 @@ function compile() {
 
     if [ "$clean" == 'y' ]; then
 
-    	make clean;
+        make clean;
 
     fi;
 
@@ -137,16 +168,26 @@ function compile() {
 # Executes the desired profile.
 function profilesControl() {
 
+    clear;
+
     settingsIntegrity;
 
     for (( i=0; i<"$PROFILES"; ++i ))
     do
 
-        echo -e "${BBlue}$i. ${NAME[$i]}${NC}";
+        echo -e "${BPurple}$i. ${BCyan}${NAME[$i]}${NC}";
 
     done;
 
+    echo -e "${BWhite}<. Return${NC}"
+
     read -r -p "Choose a profile: " option;
+
+    if [ "$option" == '<' ]; then
+
+        mainMenu;
+
+    fi;
 
     for (( i=0; i<"$PROFILES"; ++i ))
     do
@@ -156,7 +197,7 @@ function profilesControl() {
             source build/envsetup.sh;
             export CARBON_BUILDTYPE="${BUILDTYPE[$i]}";
     
-            echo -e "${Yellow}${NAME[$i]}";
+            echo -e "${BPurple}${NAME[$i]}";
             echo    "Build type: ${BUILDTYPE[$i]}";
             echo    "Build variant: ${VARIANT[$i]}";
             echo    "Threads: ${THREADS[$i]}";
@@ -197,25 +238,32 @@ function settingsIntegrity() {
 # Let's you choose between topics anc single commits.
 function repopickControl() {
 
+    clear;
+
     source build/envsetup.sh
-    read -r -p "What do you want to pick? (topic/commit)" pick;
+    echo -e "${BCyan}What do you want to pick? (topic/commit)"
+    echo -e "${BWhite}<. Return${NC}"
+    read pick;
 
     if [ "${pick}" = "topic" ]; then
         read -r -p "Topic name: " topic;
         repopick -t "${topic}";
-    fi;
-    if [ "${pick}" = "commit" ]; then
+    elif [ "${pick}" = "commit" ]; then
         read -r -p "Commit number: " commit;
         repopick "${commit}";
+    elif [ "${pick}" = '<']; then
+        mainMenu;
     fi;
 }
 
 # Colors
-Yellow='\033[0;33m';
-BYellow='\033[1;33m'
+BYellow='\033[1;33m';
 BRed='\033[1;31m';               
-BBlue='\033[1;34m';
-BGreen='\033[1;32m'
+BGreen='\033[1;32m';
+UWhite='\033[4;37m';
+BCyan='\033[1;36m';
+BPurple='\033[1;35m';
+BWhite='\033[1;37m';
 
 # No Color
 NC='\033[0m';
