@@ -211,11 +211,16 @@ function profilesControl() {
 
             lunch carbon_"${DEVICE[$i]}"-"${VARIANT[$i]}";
 
-            if [ "${CLEAN[$i]}" = 'y' ]; then
+            if [ "${CLEAN[$i]}" == 'y' ]; then
                 make clean;
             fi;
 
             make carbon -j"${THREADS[$i]}";
+
+            if [ "${UPLOAD[$i]}" == 'y' ]; then
+                echo -e "${BPurple}Uploading the file${NC}";
+                uploadHandler;
+            fi;
 
         fi;
     done;
