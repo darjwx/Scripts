@@ -53,6 +53,7 @@ function mainMenu() {
         echo -e "${BPurple}2. ${BCyan}Compile";
         echo -e "${BPurple}3. ${BCyan}Profiles";
         echo -e "${BPurple}4. ${BCyan}Repopick";
+        echo -e "${BPurple}5. ${BCyan}Uploader";
         echo -e "${BWhite}<. Exit${NC}";
 
         read -r -p "Choose an option: " option;
@@ -65,6 +66,8 @@ function mainMenu() {
             3) profilesControl;
             ;;
             4) repopickControl;
+            ;;
+            5) uploadHandler;
             ;;
             '<') exit;
             ;;
@@ -256,6 +259,49 @@ function repopickControl() {
     fi;
 }
 
+# Hanldes uploading a file using ftp.
+function uploadHandler() {
+
+    settingsIntegrity;
+    locationHandler;
+
+    case "${PROTOCOL}" in
+        ftp) ftp -n "${HOST}" <<EOF
+             user "${USER}" "${PASS}" 
+             put "$FILE"
+             get "${FILE}" retrieval.$$
+             quit
+EOF
+        ;;
+        sftp) sftp "${HOST}" <<EOF
+              put "$FILE"
+              get "${FILE}" retrieval.$$
+              quit
+EOF
+        ;;
+    esac;
+
+    if [ -f retrieval.$$ ]; then
+        echo -e "${BPurple}File uploaded succesfully${NC}";
+        rm -rf retrieval.$$;
+        sleep 5;
+    else
+        echo -e "${BPurple}Error...${NC}";
+        sleep 5;
+    fi;
+
+    locationHandler home;
+}
+
+function locationHandler() {
+
+    if [ "${1}" == "home" ]; then
+        cd "${WORKING_DIR}";
+    else
+        cd "${LOCATION}"
+    fi
+}
+
 # Colors
 BYellow='\033[1;33m';
 BRed='\033[1;31m';               
@@ -271,5 +317,8 @@ NC='\033[0m';
 # Settings config file
 settings='settings.cfg';
 settingsSecured='settingsSecured.cfg';
+
+# Directory where the script is located
+WORKING_DIR='home'
 
 mainMenu;

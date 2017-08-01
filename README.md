@@ -10,3 +10,4 @@
 * Profiles support
 * Notes support
 * Repopick support
+* Upload files with ftp or sftp
