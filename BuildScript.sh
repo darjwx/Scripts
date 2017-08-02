@@ -271,29 +271,16 @@ function uploadHandler() {
     locationHandler;
 
     case "${PROTOCOL}" in
-        ftp) ftp -n "${HOST}" <<EOF
-             user "${USER}" "${PASS}" 
-             put "$FILE"
-             get "${FILE}" retrieval.$$
+        ftp) curl -T CARBON*.zip ftp://"${USER}":"${PASS}"@"${HOST}" <<EOF
              quit
 EOF
         ;;
         sftp) sftp "${HOST}" <<EOF
-              put "$FILE"
-              get "${FILE}" retrieval.$$
+              put "${FILE}"
               quit
 EOF
         ;;
     esac;
-
-    if [ -f retrieval.$$ ]; then
-        echo -e "${BPurple}File uploaded succesfully${NC}";
-        rm -rf retrieval.$$;
-        sleep 5;
-    else
-        echo -e "${BPurple}Error...${NC}";
-        sleep 5;
-    fi;
 
     locationHandler home;
 }
