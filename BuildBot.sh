@@ -95,12 +95,8 @@ repo sync --force-sync;
 source build/envsetup.sh;
 
 if [ "${ROM}" == "carbon" ]; then
-
     export CARBON_BUILDTYPE="${BUILDTYPE}";
-
 fi;
-
-sleep 5;
 
 lunch "${ROM}"_"${DEVICE}"-"${VARIANT}";
 
