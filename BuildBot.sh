@@ -19,11 +19,9 @@
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:
 export USER=
 
-# Directory where the script is located
+# Directory where the ROM's source is located
 WORKING_DIR='';
 
-# Profile name
-NAME=
 # Device to build for
 DEVICE=
 # Build type that will appear on the device zip name
@@ -51,18 +49,6 @@ PASS=""
 LOCATION=""
 # You can use wildcards on the file name
 FILE=""
-
-# Colors
-BYellow='\033[1;33m';
-BRed='\033[1;31m';               
-BGreen='\033[1;32m';
-UWhite='\033[4;37m';
-BCyan='\033[1;36m';
-BPurple='\033[1;35m';
-BWhite='\033[1;37m';
-
-# No Color
-NC='\033[0m';
 
 # Handles uploading a file using ftp or sftp.
 # TODO: make curl work with cron.
@@ -100,20 +86,10 @@ function locationHandler() {
 
 locationHandler home;
 
-# You won't see the echo commands as this will be triggered by a crontab,
-# but they are nice to have for debugging purposes.
-echo -e "${BPurple}Repo syncing${NC}"
 repo sync --force-sync;
 
 source build/envsetup.sh;
 export CARBON_BUILDTYPE="${BUILDTYPE}";
-    
-echo -e "${BPurple}${NAME}";
-echo    "Build type: ${BUILDTYPE}";
-echo    "Build variant: ${VARIANT}";
-echo    "Threads: ${THREADS}";
-echo    "Clean build: ${CLEAN}";
-echo -e "Building for ${DEVICE}${NC}";
 
 sleep 5;
 
