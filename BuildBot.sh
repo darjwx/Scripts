@@ -22,6 +22,10 @@ export USER=
 # Directory where the ROM's source is located
 WORKING_DIR='';
 
+# Rom you are building
+ROM=
+# Make command. Normally is bacon or the name of the rom
+MAKE=
 # Device to build for
 DEVICE=
 # Build type that will appear on the device zip name
@@ -89,17 +93,22 @@ locationHandler home;
 repo sync --force-sync;
 
 source build/envsetup.sh;
-export CARBON_BUILDTYPE="${BUILDTYPE}";
+
+if [ "${ROM}" == "carbon" ]; then
+
+    export CARBON_BUILDTYPE="${BUILDTYPE}";
+
+fi;
 
 sleep 5;
 
-lunch carbon_"${DEVICE}"-"${VARIANT}";
+lunch "${ROM}"_"${DEVICE}"-"${VARIANT}";
 
 if [ "${CLEAN}" == 'y' ]; then
     make clean;
 fi;
 
-make carbon -j"${THREADS[$i]}";
+make "${MAKE}" -j"${THREADS[$i]}";
 
 if [ "${UPLOAD}" == 'y' ]; then
     echo -e "${BPurple}Uploading the file${NC}";
