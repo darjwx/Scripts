@@ -74,9 +74,9 @@ function cppAndHeader() {
   echo "int main() {}" >> ${name}.cpp;
 
   #Ifndef-define-endif structure
-  echo "#ifndef _${name}_H_" > ${name}.h;
-  echo "#define _${name}_H_" >> ${name}.h;
-  echo "#endif //_${name}_H_" >> ${name}.h;
+  echo "#ifndef _${name^^}_H_" > ${name}.h;
+  echo "#define _${name^^}_H_" >> ${name}.h;
+  echo "#endif //_${name^^}_H_" >> ${name}.h;
 
   echo -e "${BWhite}done${NC}";
   sleep 1;
